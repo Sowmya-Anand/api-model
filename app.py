@@ -8,9 +8,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 from transformers import AutoTokenizer, AutoModel
 
 
-nltk.data.path.append("/opt/venv/nltk_data")  # Force download dir
-nltk.download('punkt', download_dir="/opt/venv/nltk_data")
-nltk.download('stopwords', download_dir="/opt/venv/nltk_data")
+# ✅ No downloads at runtime
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
 
 
 # ✅ Initialize
