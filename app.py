@@ -7,6 +7,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 from transformers import AutoTokenizer, AutoModel
 import os
 
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
 
 # Initialize
 app = Flask(__name__)
