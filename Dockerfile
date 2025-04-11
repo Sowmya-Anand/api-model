@@ -1,25 +1,25 @@
 FROM python:3.10-slim
 
-# Install system packages
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV NLTK_DATA=/usr/local/nltk_data
 
-# Create app directory
+# Install basic system tools
+RUN apt-get update && apt-get install -y build-essential
+
+# Create working directory
 WORKDIR /app
-
-# Copy files
 COPY . /app
 
 # Install Python dependencies
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-# Download NLTK resources once during build
-RUN python -m nltk.downloader punkt stopwords
+# Pre-download NLTK data
+RUN python -m nltk.downloader -d /usr/local/nltk_data stopwords
 
-# Expose port (Railway will bind automatically)
+# Port for Railway/Heroku/etc
 EXPOSE 5000
 
-# Start the app
+# Run the Flask app
 CMD ["python", "app.py"]
