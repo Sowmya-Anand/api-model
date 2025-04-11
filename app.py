@@ -1,17 +1,17 @@
 from flask import Flask, request, jsonify
-import string, math, torch, re, requests
+import string, math, torch, re, requests, os
+import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from transformers import AutoTokenizer, AutoModel
-import os
 
-import nltk
+# ✅ Download required NLTK data
 nltk.download('punkt')
 nltk.download('stopwords')
 
-# Initialize
+# ✅ Initialize
 app = Flask(__name__)
 stop_words = set(stopwords.words('english'))
 punct = set(string.punctuation)
@@ -137,7 +137,7 @@ def index():
 def evaluate():
     data = request.get_json()
     student_text = data.get('student_answer')
-    teacher_data = data.get('teacher_answer')  # List of {question, marksplit, split, keywords}
+    teacher_data = data.get('teacher_answer')
 
     if not student_text or not teacher_data:
         return jsonify({"error": "Missing required input"}), 400
@@ -152,4 +152,6 @@ def evaluate():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    print("✅ API is starting...")
+    print("🔐 GEMINI_API_KEY:", "SET" if API_KEY else "NOT SET")
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
